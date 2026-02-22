@@ -1,190 +1,206 @@
-Yellow Pages Web Scraping Script (Anti-Bot Ready)
-Overview
+# Yellow Pages Web Scraping Script (Anti-Bot Ready)
 
-This script is designed to scrape business data from the Yellow Pages website, which employs strong anti-bot protections.
-To avoid bot detection, the script uses human-like behavior simulation and advanced Selenium stealth techniques.
+## Overview
 
-The workflow consists of:
+This project is a Selenium-based web scraping script designed to collect business information from the Yellow Pages website, which employs strong anti-bot protections.
 
-Safely navigating business category listings
+To avoid detection, the script simulates real human browsing behavior and applies advanced Selenium stealth and fingerprint-randomization techniques.
 
-Extracting basic business information
+The workflow includes:
 
-Visiting individual business pages in parallel to collect detailed data
+* Navigating business category listing pages
+* Extracting basic business data
+* Visiting individual business pages in parallel to collect detailed information
+* Handling errors and bot challenges gracefully
+* Exporting clean, structured data for further use
 
-Handling errors gracefully
+---
 
-Producing a clean, structured dataset for export
+## Key Features
 
-Key Features
-1. Selenium with Advanced Anti-Bot Techniques
+### 1. Selenium with Advanced Anti-Bot Techniques
 
-Since Yellow Pages actively detects automated scraping, the script mimics real human browsing behavior using:
+Because Yellow Pages actively blocks automated traffic, the script uses multiple evasion strategies:
 
-Random delays (human-like interaction timing)
+* Random delays (human-like timing)
+* User-Agent rotation
+* Random screen and viewport sizes
+* Session rotation
+* Multi-agent browser pool (parallel browsers)
+* Mouse movement simulation
+* Request fingerprint randomization
+* Selenium stealth mode (Python 3.14 compatible)
+* JavaScript, WebGL, and hardware fingerprint masking
 
-User-Agent rotation
+---
 
-Random screen and viewport sizes
+### 2. Business Category Listing Scraping
 
-Session rotation
+The script navigates category listing pages page-by-page to collect basic business information and URLs for detail pages.
 
-Multi-agent browser pool (parallel browsers)
+**Process:**
 
-Mouse movement simulation
+1. Retrieve total business count from search results
+2. Count items per page
+3. Calculate total pages to scrape
+4. Extract basic listing data:
 
-Request fingerprint randomization
+   * Business name
+   * Business URL
+   * Category
 
-Stealth mode using selenium-stealth (Python 3.14 compatible)
+---
 
-JavaScript and WebGL fingerprint masking
+### 3. Parallel Scraping of Business Detail Pages
 
-2. Business Category Listing Scraping
-
-The script navigates business category listing pages page-by-page to collect basic information.
-
-From each listing page:
-
-Basic business data is extracted
-
-Business detail page URLs are collected for deeper scraping
-
-Steps:
-
-Retrieve total number of businesses from search results
-
-Count items per page
-
-Calculate total number of pages
-
-Extract basic listing data:
-
-Business name
-
-Business URL
-
-Category
-
-3. Parallel Scraping of Business Detail Pages
-
-Because a large number of business pages must be visited, the script uses multi-threading with a multi-agent browser pool.
+To handle a large number of business pages efficiently, the script uses multi-threading with a multi-agent browser pool.
 
 Each agent:
 
-Uses a unique browser fingerprint
+* Uses a unique browser fingerprint
+* Simulates human behavior
+* Visits detail pages in parallel
 
-Visits business detail pages in parallel
+**Extracted details:**
 
-Simulates human interaction on every page
+* Address
+* Phone number(s)
 
-Extracted details include:
+This significantly improves scraping speed compared to sequential processing.
 
-Address
+---
 
-Phone number(s)
+### 4. Error Handling & Bot Detection
 
-This approach significantly improves performance compared to sequential page visits.
+The script is designed to be resilient:
 
-4. Error Handling
+* Detects Cloudflare challenges
+* Detects HTTP 403, CAPTCHA, and rate limiting
+* Automatically retries failed requests
+* Rotates sessions and browser agents when limits are reached
 
-The script is designed to be resilient and stable:
+---
 
-Detects Cloudflare challenges and bot blocks
-
-Handles HTTP 403, CAPTCHA, and rate limiting
-
-Automatically retries failed requests
-
-Rotates sessions and agents when limits are reached
-
-5. Clean Data Output
+### 5. Clean Data Output
 
 All collected data is:
 
-Cleaned and normalized
+* Cleaned and normalized
+* Combined into a single Pandas DataFrame
+* Exported for analytics and reporting use
 
-Combined into a single Pandas DataFrame
+---
 
-Exported in a format suitable for analytics and reporting
+## Workflow Instructions
 
-Workflow Instructions
-1. Install Required Packages
-selenium
-webdriver-manager
-pandas
-openpyxl
-tqdm
-fake-useragent        # User-Agent rotation
-selenium-stealth      # Fingerprint protection
-2. Import Required Libraries
+### 1. Install Required Packages
 
-All scraping, browser control, data handling, and concurrency libraries are initialized at startup.
+```bash
+pip install selenium webdriver-manager pandas openpyxl tqdm fake-useragent selenium-stealth
+```
 
-3. Configure Anti-Bot Settings
+**Packages used:**
 
-3.1 Setup User-Agent rotation
-3.2 Define random screen sizes (11 resolutions)
-3.3 Configure human-like delays
-3.4 Setup session rotation rules
+* selenium
+* webdriver-manager
+* pandas
+* openpyxl
+* tqdm
+* fake-useragent (User-Agent rotation)
+* selenium-stealth (Fingerprint protection)
 
-4. Human-Like Behavior Functions
+---
 
-4.1 Random delay generator
-4.2 Human-like scrolling (random distance and pauses)
-4.3 Mouse movement simulation
-4.4 Randomized mouse movement patterns
+### 2. Import Required Libraries
 
-5. Stealth WebDriver Setup
+All browser control, scraping logic, concurrency handling, and data processing libraries are initialized at startup.
 
-5.1 Random screen size selection
-5.2 Chrome anti-detection options
-5.3 Random User-Agent injection
-5.4 Apply selenium-stealth fingerprint protection
-5.5 Inject advanced JavaScript stealth via CDP
-5.6 Randomize WebGL and hardware fingerprints
+---
 
-6. Bot Detection & Handling
+### 3. Configure Anti-Bot Settings
 
-6.1 Detect Cloudflare challenges
-6.2 Detect bot blocks (403, CAPTCHA, rate limits)
-6.3 Safe navigation with auto-retry
+* User-Agent rotation
+* Random screen sizes (11 predefined resolutions)
+* Human-like delay configuration
+* Session rotation rules
 
-7. Scrape Business Listings with Anti-Bot Measures
+---
 
-7.1 Navigate to search URL using stealth driver
-7.2 Wait for Cloudflare challenges if detected
-7.3 Simulate human behavior (scrolling and mouse movement)
-7.4 Extract total business count
-7.5 Count items per page
-7.6 Calculate total pages
-7.7 Extract listing data:
+### 4. Human-Like Behavior Functions
 
-Name
+* Random delay generator
+* Human-like scrolling (random distance and pauses)
+* Mouse movement simulation
+* Randomized mouse movement patterns
 
-URL
+---
 
-Address
+### 5. Stealth WebDriver Setup
 
-Description
+* Random screen size selection
+* Chrome anti-detection options
+* Random User-Agent injection
+* Selenium-stealth fingerprint protection
+* Advanced JavaScript stealth injection (CDP)
+* WebGL and hardware fingerprint randomization
 
-Category
+---
 
-Google Maps link
+### 6. Bot Detection & Safe Navigation
 
-7.8 Handle pagination with human-like delays
-7.9 Rotate browser sessions after N requests
+* Detect Cloudflare challenges
+* Detect general bot blocks (403, CAPTCHA, rate limits)
+* Auto-retry with safe navigation logic
 
-8. Visit Business Pages in Parallel (Multi-Agent Pool)
+---
 
-8.1 Initialize multiple browser agents with unique fingerprints
-8.2 Extract phone number(s)
-8.3 Extract full address
-8.4 Simulate human behavior on each page
-8.5 Rotate agents after N requests
-8.6 Retry and recover from errors automatically
+### 7. Scrape Business Listings
 
-9. Data Cleaning & Export
+1. Navigate to search URL using stealth driver
+2. Wait for Cloudflare challenges if detected
+3. Simulate human behavior (scrolling and mouse movement)
+4. Extract total business count
+5. Count items per page
+6. Calculate total pages
+7. Extract listing data:
 
-9.1 Combine all collected data
-9.2 Reorder and standardize columns
-9.3 Export to CSV (UTF-8 with BOM, suitable for Thai text)
+   * Name
+   * URL
+   * Address
+   * Description
+   * Category
+   * Google Maps link
+8. Handle pagination with human-like delays
+9. Rotate browser sessions after N requests
+
+---
+
+### 8. Parallel Scraping of Business Pages (Multi-Agent Pool)
+
+* Initialize multiple browser agents with unique fingerprints
+* Extract phone number(s)
+* Extract full address
+* Simulate human behavior on each page
+* Rotate agents after N requests
+* Retry and recover from errors automatically
+
+---
+
+### 9. Data Cleaning & Export
+
+* Combine all collected data
+* Reorder and standardize columns
+* Export to CSV (UTF-8 with BOM, suitable for Thai text)
+
+---
+
+## Notes
+
+* This script is intended for **educational and internal research purposes only**.
+* Always review and comply with website terms of service and local laws before scraping.
+
+---
+
+## License
+
+MIT License
